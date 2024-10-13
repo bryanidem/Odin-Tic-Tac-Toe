@@ -51,6 +51,7 @@ const Game = (player1, player2) => {
             //Add a function to restart
             return;
         } else {
+            console.log(`Is ${currentPlayer.name}'s turn`);
             if (gameboard.placeMarker(index, currentPlayer)) {
                 if (checkWinner()) {
                     console.log(
@@ -65,6 +66,7 @@ const Game = (player1, player2) => {
                     gameIsOver = true;
                     return;
                 }
+                gameboard.displayGameboard();
                 currentPlayer = currentPlayer === player1 ? player2 : player1;
             } else {
                 console.log("Bad move, choose another index");
