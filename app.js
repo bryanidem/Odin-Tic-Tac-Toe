@@ -27,19 +27,20 @@ const Game = (player1, player2) => {
     let gameIsOver = false;
     const cells = document.querySelectorAll(".cell");
 
-    cells.forEach((cell) => {
-        cell.addEventListener("click", (event) => {
-            const index = event.target.getAttribute("data-index");
-            console.log(currentPlayer);
-            handleCellClick(index, event.target);
-            playTurn(index);
+    const disableCellClick = () => {
+        cells.forEach((cell) => {
+            cell.removeEventListener("click", handleCellClick);
         });
-    });
-
-    const handleCellClick = (index, cellElement) => {
-        console.log(index, cellElement);
-        cellElement.textContent = currentPlayer.marker;
     };
+
+    const handleCellClick = (event) => {
+        const index = event.target.getAttribute("data-index");
+        playTurn(index, event.target);
+    };
+
+    cells.forEach((cell) => {
+        cell.addEventListener("click", handleCellClick);
+    });
 
     const checkWinner = () => {
         const winnerCombinations = [
@@ -65,20 +66,23 @@ const Game = (player1, player2) => {
         result.textContent = message;
     };
 
-    const playTurn = (index) => {
+    const playTurn = (index, cellElement) => {
         if (gameIsOver) {
             displayResult("Want to play another game?");
+            disableCellClick();
             return;
         } else {
             console.log(`Is ${currentPlayer.name}'s turn`);
 
             if (gameboard.placeMarker(index, currentPlayer)) {
+                cellElement.textContent = currentPlayer.marker;
                 if (checkWinner()) {
                     console.log(
                         `Congratulations! ${currentPlayer.name} has won!`
                     );
                     displayResult(`Congratulations ${currentPlayer.name} won!`);
                     gameIsOver = true;
+                    disableCellClick();
                     return;
                 }
 
@@ -86,6 +90,7 @@ const Game = (player1, player2) => {
                     console.log("It's a draw");
                     gameIsOver = true;
                     displayResult("It's a tie!");
+                    disableCellClick();
                     return;
                 }
                 gameboard.displayGameboard();
