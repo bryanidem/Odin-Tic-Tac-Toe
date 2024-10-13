@@ -60,18 +60,24 @@ const Game = (player1, player2) => {
         );
     };
 
+    const displayResult = (message) => {
+        const result = document.querySelector(".result");
+        result.textContent = message;
+    };
+
     const playTurn = (index) => {
         if (gameIsOver) {
-            console.log("Game is over!");
-            //Add a function to restart
+            displayResult("Want to play another game?");
             return;
         } else {
             console.log(`Is ${currentPlayer.name}'s turn`);
+
             if (gameboard.placeMarker(index, currentPlayer)) {
                 if (checkWinner()) {
                     console.log(
                         `Congratulations! ${currentPlayer.name} has won!`
                     );
+                    displayResult(`Congratulations ${currentPlayer.name} won!`);
                     gameIsOver = true;
                     return;
                 }
@@ -79,33 +85,25 @@ const Game = (player1, player2) => {
                 if (gameboard.isGameboardFull()) {
                     console.log("It's a draw");
                     gameIsOver = true;
+                    displayResult("It's a tie!");
                     return;
                 }
                 gameboard.displayGameboard();
                 currentPlayer = currentPlayer === player1 ? player2 : player1;
+                game.displayResult(
+                    `${currentPlayer.name}'s Turn [${currentPlayer.marker}]`
+                );
             } else {
                 console.log("Bad move, choose another index");
+                displayResult("Cell has already a value");
             }
         }
     };
 
-    return { playTurn };
+    return { playTurn, displayResult };
 };
 
-const playGame = () => {
-    const player1 = Player("Bryan", "X");
-    const player2 = Player("Computer", "O");
-    const game = Game(player1, player2);
-    // game.playTurn(0);
-    // game.playTurn(1);
-    // game.playTurn(2);
-    // game.playTurn(3);
-    // game.playTurn(4);
-    // game.playTurn(5);
-    // game.playTurn(6);
-    // game.playTurn(7);
-    // game.playTurn(8);
-    // game.playTurn(8);
-};
-
-playGame();
+const player1 = Player("Bryan", "X");
+const player2 = Player("Computer", "O");
+const game = Game(player1, player2);
+game.displayResult(`${player1.name}'s Turn [${player1.marker}]`);
