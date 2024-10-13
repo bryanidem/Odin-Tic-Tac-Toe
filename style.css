@@ -12,3 +12,9 @@
     height: 100px;
     border: 1px solid black;
 }
+
+.winnerCell {
+    background-color: yellow;
+    color: red;
+    font-weight: bold;
+}

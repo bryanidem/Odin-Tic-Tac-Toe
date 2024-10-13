@@ -53,12 +53,17 @@ const Game = (player1, player2) => {
             [0, 4, 8],
             [2, 4, 6],
         ];
-        return winnerCombinations.some((combination) =>
-            combination.every(
-                (index) =>
-                    gameboard.getGameboard()[index] === currentPlayer.marker
-            )
-        );
+        for (const combination of winnerCombinations) {
+            if (
+                combination.every(
+                    (index) =>
+                        gameboard.getGameboard()[index] === currentPlayer.marker
+                )
+            ) {
+                return combination;
+            }
+        }
+        return null;
     };
 
     const displayResult = (message) => {
@@ -76,13 +81,12 @@ const Game = (player1, player2) => {
 
             if (gameboard.placeMarker(index, currentPlayer)) {
                 cellElement.textContent = currentPlayer.marker;
-                if (checkWinner()) {
-                    console.log(
-                        `Congratulations! ${currentPlayer.name} has won!`
-                    );
+                const winningCombination = checkWinner();
+                if (winningCombination) {
                     displayResult(`Congratulations ${currentPlayer.name} won!`);
                     gameIsOver = true;
                     disableCellClick();
+                    highlightWinner(winningCombination);
                     return;
                 }
 
@@ -103,6 +107,13 @@ const Game = (player1, player2) => {
                 displayResult("Cell has already a value");
             }
         }
+    };
+
+    const highlightWinner = (combination) => {
+        combination.forEach((index) => {
+            const cell = document.querySelector(`[data-index="${index}"]`);
+            cell.classList.add("winnerCell");
+        });
     };
 
     return { playTurn, displayResult };
