@@ -25,6 +25,21 @@ const Game = (player1, player2) => {
     const gameboard = Gameboard();
     let currentPlayer = player1;
     let gameIsOver = false;
+    const cells = document.querySelectorAll(".cell");
+
+    cells.forEach((cell) => {
+        cell.addEventListener("click", (event) => {
+            const index = event.target.getAttribute("data-index");
+            console.log(currentPlayer);
+            handleCellClick(index, event.target);
+            playTurn(index);
+        });
+    });
+
+    const handleCellClick = (index, cellElement) => {
+        console.log(index, cellElement);
+        cellElement.textContent = currentPlayer.marker;
+    };
 
     const checkWinner = () => {
         const winnerCombinations = [
@@ -81,16 +96,16 @@ const playGame = () => {
     const player1 = Player("Bryan", "X");
     const player2 = Player("Computer", "O");
     const game = Game(player1, player2);
-    game.playTurn(0);
-    game.playTurn(1);
-    game.playTurn(2);
-    game.playTurn(3);
-    game.playTurn(4);
-    game.playTurn(5);
-    game.playTurn(6);
-    game.playTurn(7);
-    game.playTurn(8);
-    game.playTurn(8);
+    // game.playTurn(0);
+    // game.playTurn(1);
+    // game.playTurn(2);
+    // game.playTurn(3);
+    // game.playTurn(4);
+    // game.playTurn(5);
+    // game.playTurn(6);
+    // game.playTurn(7);
+    // game.playTurn(8);
+    // game.playTurn(8);
 };
 
 playGame();
