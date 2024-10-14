@@ -26,6 +26,18 @@ const Game = (player1, player2) => {
     let currentPlayer = player1;
     let gameIsOver = false;
     const cells = document.querySelectorAll(".cell");
+    const resetButton = document.querySelector(".resetButton");
+
+    const resetGame = () => {
+        gameboard.getGameboard().fill("");
+        cells.forEach((cell) => (cell.textContent = ""));
+        currentPlayer = player1;
+        gameIsOver = false;
+        cells.forEach((cell) => {
+            cell.addEventListener("click", handleCellClick);
+            cell.classList.remove("winnerCell");
+        });
+    };
 
     const disableCellClick = () => {
         cells.forEach((cell) => {
@@ -41,6 +53,8 @@ const Game = (player1, player2) => {
     cells.forEach((cell) => {
         cell.addEventListener("click", handleCellClick);
     });
+
+    resetButton.addEventListener("click", resetGame);
 
     const checkWinner = () => {
         const winnerCombinations = [
@@ -119,7 +133,7 @@ const Game = (player1, player2) => {
     return { playTurn, displayResult };
 };
 
-const player1 = Player("Bryan", "X");
-const player2 = Player("Computer", "O");
+const player1 = Player("Player1", "X");
+const player2 = Player("Player2", "O");
 const game = Game(player1, player2);
 game.displayResult(`${player1.name}'s Turn [${player1.marker}]`);
