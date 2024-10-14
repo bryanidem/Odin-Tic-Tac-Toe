@@ -10,11 +10,10 @@ const Gameboard = () => {
         }
     };
     const getGameboard = () => gameboard;
-    const displayGameboard = () => console.log(gameboard);
     const isGameboardFull = () =>
         gameboard.filter((cell) => cell === "").length === 0;
 
-    return { getGameboard, placeMarker, displayGameboard, isGameboardFull };
+    return { getGameboard, placeMarker, isGameboardFull };
 };
 
 const Player = (name, marker) => {
@@ -37,6 +36,7 @@ const Game = (player1, player2) => {
             cell.addEventListener("click", handleCellClick);
             cell.classList.remove("winnerCell");
         });
+        displayResult(`${currentPlayer.name}'s Turn [${currentPlayer.marker}]`);
     };
 
     const disableCellClick = () => {
@@ -91,8 +91,6 @@ const Game = (player1, player2) => {
             disableCellClick();
             return;
         } else {
-            console.log(`Is ${currentPlayer.name}'s turn`);
-
             if (gameboard.placeMarker(index, currentPlayer)) {
                 cellElement.textContent = currentPlayer.marker;
                 const winningCombination = checkWinner();
@@ -105,19 +103,17 @@ const Game = (player1, player2) => {
                 }
 
                 if (gameboard.isGameboardFull()) {
-                    console.log("It's a draw");
                     gameIsOver = true;
                     displayResult("It's a tie!");
                     disableCellClick();
                     return;
                 }
-                gameboard.displayGameboard();
+
                 currentPlayer = currentPlayer === player1 ? player2 : player1;
                 game.displayResult(
                     `${currentPlayer.name}'s Turn [${currentPlayer.marker}]`
                 );
             } else {
-                console.log("Bad move, choose another index");
                 displayResult("Cell has already a value");
             }
         }
@@ -133,7 +129,7 @@ const Game = (player1, player2) => {
     return { playTurn, displayResult };
 };
 
-const player1 = Player("Player1", "X");
-const player2 = Player("Player2", "O");
+const player1 = Player("Player 1", "X");
+const player2 = Player("Player 2", "O");
 const game = Game(player1, player2);
-game.displayResult(`${player1.name}'s Turn [${player1.marker}]`);
+game.displayResult(`${player1.name} Turn [${player1.marker}]`);
